@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Villa Alba — Antibes, Côte d'Azur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf8f4;
+      --warm-white: #f5f0e8;
+      --sand: #e8ddc8;
+      --gold: #b8965a;
+      --gold-light: #d4aa6e;
+      --dark: #2c2416;
+      --mid: #5a4e3a;
+      --light-text: #8a7a62;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      font-weight: 300;
+    }
+
+    /* ── LANGUAGE TOGGLE ── */
+    .lang-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 14px 40px;
+      background: rgba(250,248,244,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(184,150,90,0.15);
+    }
+    .lang-btn {
+      background: none;
+      border: 1px solid var(--gold);
+      color: var(--mid);
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-left: 8px;
+    }
+    .lang-btn.active, .lang-btn:hover {
+      background: var(--gold);
+      color: white;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      height: 100vh;
+      min-height: 600px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(160deg, #d4c9b0 0%, #b8a880 40%, #8a7a5a 100%);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(255,240,200,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse at 75% 30%, rgba(200,220,255,0.2) 0%, transparent 50%),
+        linear-gradient(170deg, #ccc0a0 0%, #a89060 50%, #7a6840 100%);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(44,36,22,0.15) 0%, rgba(44,36,22,0.45) 100%);
+    }
+    /* Decorative circle */
+    .hero-circle {
+      position: absolute;
+      width: 520px; height: 520px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.18);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-circle::before {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      color: white;
+      padding: 0 20px;
+      animation: fadeUp 1.2s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 9vw, 100px);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+    .hero-title em {
+      font-style: italic;
+      font-weight: 300;
+    }
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.08em;
+      margin-bottom: 40px;
+    }
+    .hero-cta {
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.6);
+      color: white;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 14px 36px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .hero-cta:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: white;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.6);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 40px; }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.4;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(34px, 5vw, 54px);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: var(--dark);
+    }
+    .section-title em { font-style: italic; }
+
+    .body-text {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--mid);
+      max-width: 680px;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--cream); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-top: 60px;
+    }
+    .about-image-placeholder {
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--sand) 0%, #c8b890 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-image-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .about-image-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .about-image-icon {
+      font-size: 32px;
+      opacity: 0.5;
+    }
+
+    /* ── FEATURES ── */
+    #features { background: var(--warm-white); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 60px;
+    }
+    .feature-card {
+      background: white;
+      padding: 40px 32px;
+      transition: transform 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-4px); }
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .feature-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+    .feature-desc {
+      font-size: 13.5px;
+      line-height: 1.75;
+      color: var(--light-text);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      text-align: center;
+      padding: 60px 40px;
+      background: var(--dark);
+      color: white;
+    }
+    .divider-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 4vw, 38px);
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.05em;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.85);
+    }
+    .divider-line {
+      width: 60px; height: 1px;
+      background: var(--gold);
+      margin: 20px auto 0;
+    }
+
+    /* ── AREA ── */
+    #area { background: var(--cream); }
+    .area-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-top: 60px;
+    }
+    .area-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .area-card {
+      background: var(--warm-white);
+      padding: 28px 30px;
+      border-left: 3px solid var(--gold);
+    }
+    .area-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+    .area-card-text {
+      font-size: 13.5px;
+      line-height: 1.75;
+      color: var(--light-text);
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--warm-white); }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-top: 60px;
+    }
+    .contact-details { display: flex; flex-direction: column; gap: 28px; }
+    .contact-item-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .contact-item-value {
+      font-size: 16px;
+      color: var(--dark);
+    }
+    .contact-item-value a {
+      color: var(--dark);
+      text-decoration: none;
+      border-bottom: 1px solid var(--sand);
+      transition: border-color 0.2s;
+    }
+    .contact-item-value a:hover { border-color: var(--gold); }
+    .contact-map-placeholder {
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #d0c8b0 0%, #b8a878 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      padding: 40px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+    }
+    footer strong {
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+    }
+
+    /* ── LANGUAGE SWITCHING ── */
+    [data-lang="en"] { display: none; }
+    body.lang-en [data-lang="da"] { display: none; }
+    body.lang-en [data-lang="en"] { display: revert; }
+    body.lang-en .lang-btn[data-target="en"] { background: var(--gold); color: white; }
+    body.lang-en .lang-btn[data-target="da"] { background: none; color: var(--mid); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      section { padding: 70px 24px; }
+      .about-grid, .area-grid, .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .lang-bar { padding: 12px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LANGUAGE BAR -->
+  <div class="lang-bar">
+    <button class="lang-btn active" data-target="da" onclick="setLang('da')">DA</button>
+    <button class="lang-btn" data-target="en" onclick="setLang('en')">EN</button>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-circle"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Antibes · Côte d'Azur</p>
+      <h1 class="hero-title">Villa <em>Alba</em></h1>
+      <p class="hero-subtitle" data-lang="da">Din private oase ved Middelhavet</p>
+      <p class="hero-subtitle" data-lang="en">Your private oasis on the Mediterranean</p>
+      <a href="#about" class="hero-cta" data-lang="da">Udforsk villaen</a>
+      <a href="#about" class="hero-cta" data-lang="en">Discover the villa</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div>
+          <p class="section-label" data-lang="da">Om villaen</p>
+          <p class="section-label" data-lang="en">About the villa</p>
+          <h2 class="section-title" data-lang="da">Lys, stilfuld &amp;<br><em>uforlignelig beliggenhed</em></h2>
+          <h2 class="section-title" data-lang="en">Light, elegant &amp;<br><em>unrivalled location</em></h2>
+          <p class="body-text" data-lang="da">
+            Villa Alba er en smuk og lys feriebolig beliggende i hjertet af Antibes — en af Rivieraens mest elskede byer. Med sine hvide vægge, terracotta-gulve og en frodig privat have er villaen det perfekte fristed for dem, der søger både afslapning og autentisk sydfransk atmosfære.
+          </p>
+          <p class="body-text" data-lang="en">
+            Villa Alba is a beautiful and luminous holiday home located in the heart of Antibes — one of the Riviera's most beloved towns. With its white walls, terracotta floors and a lush private garden, the villa is the perfect retreat for those seeking both relaxation and an authentic South of France atmosphere.
+          </p>
+          <br>
+          <p class="body-text" data-lang="da">
+            Villaen rummer op til 8 personer fordelt på 4 soveværelser og 3 badeværelser. Den rummelige stue og det fuldt udstyrede køkken åbner ud til terrassen, hvor du kan nyde morgenmad i skyggen af oliventræerne.
+          </p>
+          <p class="body-text" data-lang="en">
+            The villa accommodates up to 8 guests across 4 bedrooms and 3 bathrooms. The spacious living room and fully equipped kitchen open onto the terrace, where you can enjoy breakfast in the shade of the olive trees.
+          </p>
+        </div>
+        <div>
+          <div class="about-image-placeholder">
+            <div class="about-image-text">
+              <span class="about-image-icon">🏡</span>
+              <span data-lang="da">Indsæt foto her</span>
+              <span data-lang="en">Insert photo here</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section-inner">
+      <p class="section-label" data-lang="da">Hvad er inkluderet</p>
+      <p class="section-label" data-lang="en">What's included</p>
+      <h2 class="section-title" data-lang="da">Faciliteter &amp; <em>komfort</em></h2>
+      <h2 class="section-title" data-lang="en">Amenities &amp; <em>comfort</em></h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🏊</div>
+          <h3 class="feature-title" data-lang="da">Privat pool</h3>
+          <h3 class="feature-title" data-lang="en">Private pool</h3>
+          <p class="feature-desc" data-lang="da">Opvarmet pool med solafdækning og liggestole. Nyd solen fra morgen til aften i fuldstændig privatliv.</p>
+          <p class="feature-desc" data-lang="en">Heated pool with sun awning and loungers. Enjoy the sun from morning to evening in complete privacy.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌿</div>
+          <h3 class="feature-title" data-lang="da">Privat have</h3>
+          <h3 class="feature-title" data-lang="en">Private garden</h3>
+          <p class="feature-desc" data-lang="da">Afskærmet have med mediterrane planter, oliventræer og udendørs spiseplads til sommermiddage under åben himmel.</p>
+          <p class="feature-desc" data-lang="en">Enclosed garden with Mediterranean plants, olive trees and an outdoor dining area for summer evenings under the open sky.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🍽️</div>
+          <h3 class="feature-title" data-lang="da">Fuldt udstyret køkken</h3>
+          <h3 class="feature-title" data-lang="en">Fully equipped kitchen</h3>
+          <p class="feature-desc" data-lang="da">Stort provençalsk køkken med alt, hvad der kræves til de store middage — inklusive grill og kaffemaskine.</p>
+          <p class="feature-desc" data-lang="en">Large Provençal kitchen with everything needed for lavish dinners — including barbecue and coffee machine.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛏️</div>
+          <h3 class="feature-title" data-lang="da">4 soveværelser</h3>
+          <h3 class="feature-title" data-lang="en">4 bedrooms</h3>
+          <p class="feature-desc" data-lang="da">Alle soveværelser er lyst og elegant indrettede med friske linned og udsigt til haven eller havet.</p>
+          <p class="feature-desc" data-lang="en">All bedrooms are bright and elegantly decorated with fresh linens and views of the garden or sea.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📶</div>
+          <h3 class="feature-title" data-lang="da">Wifi &amp; AC</h3>
+          <h3 class="feature-title" data-lang="en">Wifi &amp; AC</h3>
+          <p class="feature-desc" data-lang="da">Hurtigt wifi i hele huset samt klimaanlæg i alle rum. Hold dig kold og forbundet, selv på de varmeste dage.</p>
+          <p class="feature-desc" data-lang="en">Fast wifi throughout and air conditioning in every room. Stay cool and connected even on the hottest days.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚗</div>
+          <h3 class="feature-title" data-lang="da">Parkering</h3>
+          <h3 class="feature-title" data-lang="en">Parking</h3>
+          <p class="feature-desc" data-lang="da">Aflåst privat parkeringsplads til to biler inden for matriklen — sjældent og bekvemt i Antibes.</p>
+          <p class="feature-desc" data-lang="en">Gated private parking for two cars within the property — rare and convenient in Antibes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE DIVIDER -->
+  <div class="divider">
+    <p class="divider-text" data-lang="da">"Antibes er der, hvor det sydfranske lys er allersmukkest — og Villa Alba sætter dig midt i det hele."</p>
+    <p class="divider-text" data-lang="en">"Antibes is where the South of France light is at its most beautiful — and Villa Alba places you right in the heart of it."</p>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- AREA -->
+  <section id="area">
+    <div class="section-inner">
+      <p class="section-label" data-lang="da">Omgivelserne</p>
+      <p class="section-label" data-lang="en">The surroundings</p>
+      <h2 class="section-title" data-lang="da">Antibes &amp; <em>omegn</em></h2>
+      <h2 class="section-title" data-lang="en">Antibes &amp; <em>beyond</em></h2>
+      <div class="area-grid">
+        <div>
+          <p class="body-text" data-lang="da">
+            Antibes er en af Rivieraens bedst bevarede byer med en middelalderlig gammel bydel, en livlig havn, lange sandstrande og det berømte Picasso-museum. Fra Villa Alba er du kun få minutters gang fra det hele.
+          </p>
+          <p class="body-text" data-lang="en">
+            Antibes is one of the best-preserved towns on the Riviera, with a medieval old town, a vibrant harbour, long sandy beaches and the famous Picasso Museum. From Villa Alba you are just minutes on foot from everything.
+          </p>
+          <br>
+          <p class="body-text" data-lang="da">
+            Nice Côte d'Azur Lufthavn er kun 20 minutter væk i bil, og med tog er du i Monaco på 30 minutter og i Cannes på blot 15.
+          </p>
+          <p class="body-text" data-lang="en">
+            Nice Côte d'Azur Airport is only 20 minutes away by car, and by train you can be in Monaco in 30 minutes and in Cannes in just 15.
+          </p>
+        </div>
+        <div class="area-cards">
+          <div class="area-card">
+            <h4 class="area-card-title" data-lang="da">🛒 Indkøb</h4>
+            <h4 class="area-card-title" data-lang="en">🛒 Shopping</h4>
+            <p class="area-card-text" data-lang="da">Marché Provençal — det daglige provençalske marked — holder til 5 min. til fods. Supermarché og boulangerie i umiddelbar nærhed.</p>
+            <p class="area-card-text" data-lang="en">The Marché Provençal — the daily fresh market — is 5 minutes on foot. Supermarché and boulangerie are also close by.</p>
+          </div>
+          <div class="area-card">
+            <h4 class="area-card-title" data-lang="da">🏖️ Strande</h4>
+            <h4 class="area-card-title" data-lang="en">🏖️ Beaches</h4>
+            <p class="area-card-text" data-lang="da">Plage de la Gravette og Plage du Ponteil er begge inden for 10 minutters gang — to af Antibes' smukkeste familiestrande.</p>
+            <p class="area-card-text" data-lang="en">Plage de la Gravette and Plage du Ponteil are both within a 10-minute walk — two of Antibes' most beautiful family beaches.</p>
+          </div>
+          <div class="area-card">
+            <h4 class="area-card-title" data-lang="da">🎨 Attraktioner</h4>
+            <h4 class="area-card-title" data-lang="en">🎨 Attractions</h4>
+            <p class="area-card-text" data-lang="da">Musée Picasso, Vieille Ville (den gamle bydel), Cap d'Antibes, Juan-les-Pins og Monaco er alle nemme udflugtsmål.</p>
+            <p class="area-card-text" data-lang="en">Musée Picasso, Vieille Ville (the old town), Cap d'Antibes, Juan-les-Pins and Monaco are all easy day trips.</p>
+          </div>
+          <div class="area-card">
+            <h4 class="area-card-title" data-lang="da">🍷 Restauranter</h4>
+            <h4 class="area-card-title" data-lang="en">🍷 Restaurants</h4>
+            <p class="area-card-text" data-lang="da">Fra enkle havnecafeer til Michelin-stjernede restauranter — Antibes byder på alle niveauer. Vi kan anbefale vores favoritter ved ankomst.</p>
+            <p class="area-card-text" data-lang="en">From simple harbour cafés to Michelin-starred restaurants — Antibes caters to all levels. We are happy to share our personal favourites on arrival.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label" data-lang="da">Kontakt</p>
+      <p class="section-label" data-lang="en">Contact</p>
+      <h2 class="section-title" data-lang="da">Book dit <em>ophold</em></h2>
+      <h2 class="section-title" data-lang="en">Book your <em>stay</em></h2>
+      <div class="contact-inner">
+        <div class="contact-details">
+          <div>
+            <p class="contact-item-label" data-lang="da">Spørgsmål &amp; booking</p>
+            <p class="contact-item-label" data-lang="en">Enquiries &amp; booking</p>
+            <p class="contact-item-value"><a href="mailto:info@villaalba.com">info@villaalba.com</a></p>
+          </div>
+          <div>
+            <p class="contact-item-label" data-lang="da">Telefon</p>
+            <p class="contact-item-label" data-lang="en">Phone</p>
+            <p class="contact-item-value"><a href="tel:+4512345678">+45 12 34 56 78</a></p>
+          </div>
+          <div>
+            <p class="contact-item-label" data-lang="da">Sæson</p>
+            <p class="contact-item-label" data-lang="en">Season</p>
+            <p class="contact-item-value" data-lang="da">Maj – Oktober</p>
+            <p class="contact-item-value" data-lang="en">May – October</p>
+          </div>
+          <div>
+            <p class="contact-item-label" data-lang="da">Minimumsophold</p>
+            <p class="contact-item-label" data-lang="en">Minimum stay</p>
+            <p class="contact-item-value" data-lang="da">1 uge (lørdag til lørdag)</p>
+            <p class="contact-item-value" data-lang="en">1 week (Saturday to Saturday)</p>
+          </div>
+          <div>
+            <p class="contact-item-label" data-lang="da">Beliggenhed</p>
+            <p class="contact-item-label" data-lang="en">Location</p>
+            <p class="contact-item-value">Antibes, Côte d'Azur, France</p>
+          </div>
+        </div>
+        <div class="contact-map-placeholder">
+          <span style="font-size:32px">📍</span>
+          <span data-lang="da">Antibes, Frankrig</span>
+          <span data-lang="en">Antibes, France</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>Villa Alba</strong> &nbsp;·&nbsp; Antibes, Côte d'Azur &nbsp;·&nbsp; <a href="mailto:info@villaalba.com" style="color:rgba(255,255,255,0.45);text-decoration:none;">info@villaalba.com</a></p>
+  </footer>
+
+  <script>
+    function setLang(lang) {
+      document.body.classList.toggle('lang-en', lang === 'en');
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.target === lang);
+      });
+    }
+  </script>
+
+</body>
+</html>
