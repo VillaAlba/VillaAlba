@@ -28,19 +28,116 @@
       font-weight: 300;
     }
 
-    /* ── LANGUAGE TOGGLE ── */
-    .lang-bar {
+    /* ── NAVBAR ── */
+    .navbar {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
-      padding: 14px 40px;
-      background: rgba(250,248,244,0.92);
-      backdrop-filter: blur(8px);
+      padding: 0 40px;
+      height: 60px;
+      background: rgba(250,248,244,0.95);
+      backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(184,150,90,0.15);
     }
+
+    .navbar-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--dark);
+      text-decoration: none;
+    }
+    .navbar-logo em { font-style: italic; }
+
+    .navbar-center {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* Nav items */
+    .nav-item {
+      position: relative;
+    }
+    .nav-link {
+      display: block;
+      padding: 0 18px;
+      height: 60px;
+      line-height: 60px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+      white-space: nowrap;
+      background: none;
+      border: none;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+    }
+    .nav-link:hover { color: var(--gold); }
+    .nav-link.has-dropdown::after {
+      content: ' ▾';
+      font-size: 9px;
+      opacity: 0.6;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      min-width: 200px;
+      background: var(--cream);
+      border: 1px solid rgba(184,150,90,0.2);
+      border-top: 2px solid var(--gold);
+      box-shadow: 0 8px 30px rgba(44,36,22,0.1);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.25s ease;
+    }
+    .nav-item:hover .dropdown,
+    .nav-item:focus-within .dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .dropdown a {
+      display: block;
+      padding: 14px 20px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(184,150,90,0.1);
+      transition: all 0.2s;
+    }
+    .dropdown a:last-child { border-bottom: none; }
+    .dropdown a:hover {
+      background: var(--warm-white);
+      color: var(--gold);
+      padding-left: 26px;
+    }
+    .dropdown-label {
+      display: block;
+      padding: 10px 20px 6px;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+
+    /* Language buttons */
+    .navbar-right { display: flex; align-items: center; gap: 6px; }
     .lang-btn {
       background: none;
       border: 1px solid var(--gold);
@@ -49,14 +146,61 @@
       font-size: 11px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      padding: 6px 14px;
+      padding: 5px 12px;
       cursor: pointer;
       transition: all 0.25s;
-      margin-left: 8px;
     }
     .lang-btn.active, .lang-btn:hover {
       background: var(--gold);
       color: white;
+    }
+
+    /* Mobile hamburger */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px; height: 1px;
+      background: var(--dark);
+      transition: all 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .navbar { padding: 0 24px; }
+      .navbar-center { display: none; }
+      .nav-toggle { display: flex; }
+      .navbar-center.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 60px; left: 0; right: 0;
+        background: var(--cream);
+        border-bottom: 1px solid var(--sand);
+        padding: 10px 0 20px;
+        gap: 0;
+        align-items: stretch;
+      }
+      .nav-link { height: auto; line-height: 1; padding: 14px 24px; }
+      .dropdown {
+        position: static;
+        border: none;
+        border-top: none;
+        border-left: 3px solid var(--gold);
+        box-shadow: none;
+        margin-left: 20px;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        display: none;
+      }
+      .nav-item.open .dropdown { display: block; }
     }
 
     /* ── HERO ── */
@@ -422,11 +566,56 @@
 </head>
 <body>
 
-  <!-- LANGUAGE BAR -->
-  <div class="lang-bar">
-    <button class="lang-btn active" data-target="da" onclick="setLang('da')">DA</button>
-    <button class="lang-btn" data-target="en" onclick="setLang('en')">EN</button>
-  </div>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="#top" class="navbar-logo">Villa <em>Alba</em></a>
+
+    <div class="navbar-center" id="navCenter">
+
+      <div class="nav-item">
+        <a href="#about" class="nav-link" data-lang="da">Villaen</a>
+        <a href="#about" class="nav-link" data-lang="en">The Villa</a>
+      </div>
+
+      <div class="nav-item">
+        <a href="#features" class="nav-link" data-lang="da">Faciliteter</a>
+        <a href="#features" class="nav-link" data-lang="en">Amenities</a>
+      </div>
+
+      <div class="nav-item">
+        <a href="#area" class="nav-link" data-lang="da">Området</a>
+        <a href="#area" class="nav-link" data-lang="en">The Area</a>
+      </div>
+
+      <div class="nav-item">
+        <span class="nav-link has-dropdown">Transport</span>
+        <div class="dropdown">
+          <span class="dropdown-label" data-lang="da">Kom til Antibes</span>
+          <span class="dropdown-label" data-lang="en">Getting to Antibes</span>
+          <a href="#transport-fly" data-lang="da">✈️ &nbsp;Fly</a>
+          <a href="#transport-fly" data-lang="en">✈️ &nbsp;By air</a>
+          <a href="#transport-train" data-lang="da">🚆 &nbsp;Tog</a>
+          <a href="#transport-train" data-lang="en">🚆 &nbsp;By train</a>
+          <a href="#transport-car" data-lang="da">🚗 &nbsp;Bil</a>
+          <a href="#transport-car" data-lang="en">🚗 &nbsp;By car</a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <a href="#contact" class="nav-link" data-lang="da">Kontakt</a>
+        <a href="#contact" class="nav-link" data-lang="en">Contact</a>
+      </div>
+
+    </div>
+
+    <div class="navbar-right">
+      <button class="lang-btn active" data-target="da" onclick="setLang('da')">DA</button>
+      <button class="lang-btn" data-target="en" onclick="setLang('en')">EN</button>
+      <button class="nav-toggle" id="navToggle" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
 
   <!-- HERO -->
   <section class="hero" id="top">
@@ -436,7 +625,7 @@
     <div class="hero-content">
       <p class="hero-eyebrow">Antibes · Côte d'Azur</p>
       <h1 class="hero-title">Villa <em>Alba</em></h1>
-      <p class="hero-subtitle" data-lang="da">City lejlighed i den gamle by i Antibes</p>
+      <p class="hero-subtitle" data-lang="da">Din private oase ved Middelhavet</p>
       <p class="hero-subtitle" data-lang="en">Your private oasis on the Mediterranean</p>
       <a href="#about" class="hero-cta" data-lang="da">Udforsk villaen</a>
       <a href="#about" class="hero-cta" data-lang="en">Discover the villa</a>
@@ -597,6 +786,43 @@
     </div>
   </section>
 
+  <!-- TRANSPORT -->
+  <section id="transport" style="background: var(--cream);">
+    <div class="section-inner">
+      <p class="section-label" data-lang="da">Praktisk info</p>
+      <p class="section-label" data-lang="en">Practical info</p>
+      <h2 class="section-title" data-lang="da">Transport til <em>Antibes</em></h2>
+      <h2 class="section-title" data-lang="en">Getting to <em>Antibes</em></h2>
+      <div style="display:grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 60px;">
+
+        <div id="transport-fly" class="feature-card">
+          <div class="feature-icon">✈️</div>
+          <h3 class="feature-title" data-lang="da">Fly</h3>
+          <h3 class="feature-title" data-lang="en">By air</h3>
+          <p class="feature-desc" data-lang="da">Nice Côte d'Azur Lufthavn (NCE) er den nærmeste lufthavn — kun 20 minutters kørsel fra Villa Alba. Der er direkte forbindelser fra København med SAS og Norwegian. Fra lufthavnen kan du tage taxa, leje bil eller tage bussen (linje 200) direkte til Antibes.</p>
+          <p class="feature-desc" data-lang="en">Nice Côte d'Azur Airport (NCE) is the nearest airport — only 20 minutes' drive from Villa Alba. There are direct connections from Copenhagen with SAS and Norwegian. From the airport you can take a taxi, rent a car or take the bus (line 200) directly to Antibes.</p>
+        </div>
+
+        <div id="transport-train" class="feature-card">
+          <div class="feature-icon">🚆</div>
+          <h3 class="feature-title" data-lang="da">Tog</h3>
+          <h3 class="feature-title" data-lang="en">By train</h3>
+          <p class="feature-desc" data-lang="da">Antibes har sin egen togstation med hyppige forbindelser langs kysten. Fra Nice er rejsetiden ca. 25 minutter, fra Cannes kun 15 minutter. Stationen ligger 10 minutters gang fra Villa Alba.</p>
+          <p class="feature-desc" data-lang="en">Antibes has its own train station with frequent connections along the coast. From Nice the journey is about 25 minutes, from Cannes just 15 minutes. The station is a 10-minute walk from Villa Alba.</p>
+        </div>
+
+        <div id="transport-car" class="feature-card">
+          <div class="feature-icon">🚗</div>
+          <h3 class="feature-title" data-lang="da">Bil</h3>
+          <h3 class="feature-title" data-lang="en">By car</h3>
+          <p class="feature-desc" data-lang="da">Fra Nice følger du motorvejen A8 mod vest og tager afkørslen Antibes. Rejsetiden er ca. 30 minutter. Villa Alba har privat parkering til to biler inden for matriklen. Bemærk at der kan være kø i højsæsonen.</p>
+          <p class="feature-desc" data-lang="en">From Nice, follow the A8 motorway westbound and take the Antibes exit. Journey time is approximately 30 minutes. Villa Alba has private parking for two cars within the property. Please note that traffic can be heavy during peak season.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT -->
   <section id="contact">
     <div class="section-inner">
@@ -609,7 +835,7 @@
           <div>
             <p class="contact-item-label" data-lang="da">Spørgsmål &amp; booking</p>
             <p class="contact-item-label" data-lang="en">Enquiries &amp; booking</p>
-            <p class="contact-item-value"><a href="mailto:info@villaalba.com">info@villaalba.com</a></p>
+            <p class="contact-item-value"><a href="/cdn-cgi/l/email-protection#83eaede5ecc3f5eaefefe2e2efe1e2ade0ecee"><span class="__cf_email__" data-cfemail="234a4d454c63554a4f4f42424f41420d404c4e">[email&#160;protected]</span></a></p>
           </div>
           <div>
             <p class="contact-item-label" data-lang="da">Telefon</p>
@@ -645,7 +871,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <p><strong>Villa Alba</strong> &nbsp;·&nbsp; Antibes, Côte d'Azur &nbsp;·&nbsp; <a href="mailto:info@villaalba.com" style="color:rgba(255,255,255,0.45);text-decoration:none;">info@villaalba.com</a></p>
+    <p><strong>Villa Alba</strong> &nbsp;·&nbsp; Antibes, Côte d'Azur &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection#d5bcbbb3ba95a3bcb9b9b4b4b9b7b4fbb6bab8" style="color:rgba(255,255,255,0.45);text-decoration:none;"><span class="__cf_email__" data-cfemail="bdd4d3dbd2fdcbd4d1d1dcdcd1dfdc93ded2d0">[email&#160;protected]</span></a></p>
   </footer>
 
   <script>
@@ -655,7 +881,16 @@
         btn.classList.toggle('active', btn.dataset.target === lang);
       });
     }
-  </script>
 
+    function toggleMenu() {
+      document.getElementById('navCenter').classList.toggle('open');
+    }
+
+    document.querySelectorAll('.nav-link, .dropdown a').forEach(el => {
+      el.addEventListener('click', () => {
+        document.getElementById('navCenter').classList.remove('open');
+      });
+    });
+  </script>
 </body>
 </html>
