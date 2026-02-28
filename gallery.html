@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galleri — Villa Alba, Antibes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #faf8f4;
+      --warm-white: #f5f0e8;
+      --sand: #e8ddc8;
+      --gold: #b8965a;
+      --dark: #2c2416;
+      --mid: #5a4e3a;
+      --light-text: #8a7a62;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--dark); font-weight: 300; }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 40px; height: 60px;
+      background: rgba(250,248,244,0.95); backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(184,150,90,0.15);
+    }
+    .navbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.08em; color: var(--dark); text-decoration: none; }
+    .navbar-logo em { font-style: italic; }
+    .navbar-center { display: flex; align-items: center; }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: block; padding: 0 18px; height: 60px; line-height: 60px;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none; cursor: pointer;
+      transition: color 0.2s; white-space: nowrap;
+      background: none; border: none; font-family: 'Jost', sans-serif; font-weight: 300;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--gold); }
+    .nav-link.has-dropdown::after { content: ' ▾'; font-size: 9px; opacity: 0.6; }
+    .dropdown {
+      position: absolute; top: 60px; left: 0; min-width: 200px;
+      background: var(--cream); border: 1px solid rgba(184,150,90,0.2);
+      border-top: 2px solid var(--gold); box-shadow: 0 8px 30px rgba(44,36,22,0.1);
+      opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.25s ease;
+    }
+    .nav-item:hover .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown a {
+      display: block; padding: 14px 20px; font-size: 12px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--mid); text-decoration: none;
+      border-bottom: 1px solid rgba(184,150,90,0.1); transition: all 0.2s;
+    }
+    .dropdown a:last-child { border-bottom: none; }
+    .dropdown a:hover { background: var(--warm-white); color: var(--gold); padding-left: 26px; }
+    .dropdown-label { display: block; padding: 10px 20px 6px; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); opacity: 0.7; }
+    .navbar-right { display: flex; align-items: center; gap: 6px; }
+    .lang-btn {
+      background: none; border: 1px solid var(--gold); color: var(--mid);
+      font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.15em;
+      text-transform: uppercase; padding: 5px 12px; cursor: pointer; transition: all 0.25s;
+    }
+    .lang-btn.active, .lang-btn:hover { background: var(--gold); color: white; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; flex-direction: column; gap: 5px; }
+    .nav-toggle span { display: block; width: 22px; height: 1px; background: var(--dark); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 120px 40px 60px;
+      text-align: center;
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--sand);
+    }
+    .page-eyebrow {
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 14px;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 6vw, 62px); font-weight: 300; line-height: 1.1;
+      color: var(--dark);
+    }
+    .page-title em { font-style: italic; }
+    .page-subtitle {
+      margin-top: 16px; font-size: 14px; color: var(--light-text);
+      letter-spacing: 0.05em; line-height: 1.7;
+    }
+
+    /* ── GALLERY ── */
+    .gallery-section { padding: 60px 40px 100px; max-width: 1300px; margin: 0 auto; }
+
+    .gallery-category { margin-bottom: 70px; }
+    .category-label {
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .category-label::after { content: ''; flex: 1; height: 1px; background: var(--gold); opacity: 0.25; }
+    .category-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 300; margin-bottom: 28px; color: var(--dark);
+    }
+    .category-title em { font-style: italic; }
+
+    /* Masonry-style grid */
+    .photo-grid { display: grid; gap: 6px; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-feature { grid-template-columns: 2fr 1fr; }
+    .grid-feature-rev { grid-template-columns: 1fr 2fr; }
+
+    .photo-slot {
+      position: relative; overflow: hidden; cursor: pointer;
+      background: linear-gradient(135deg, var(--sand) 0%, #c0aa80 100%);
+    }
+    .photo-slot:hover .photo-overlay { opacity: 1; }
+    .photo-slot img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.5s ease;
+    }
+    .photo-slot:hover img { transform: scale(1.04); }
+
+    /* Placeholder when no image */
+    .photo-placeholder {
+      width: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px; color: rgba(255,255,255,0.65);
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      background: linear-gradient(135deg, #d0c4a8 0%, #b0986a 100%);
+    }
+    .photo-placeholder-icon { font-size: 28px; opacity: 0.6; }
+
+    /* Aspect ratios */
+    .ratio-landscape { aspect-ratio: 4/3; }
+    .ratio-portrait  { aspect-ratio: 3/4; }
+    .ratio-square    { aspect-ratio: 1/1; }
+    .ratio-wide      { aspect-ratio: 16/9; }
+    .ratio-tall      { aspect-ratio: 2/3; }
+
+    .photo-overlay {
+      position: absolute; inset: 0;
+      background: rgba(44,36,22,0.25);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .photo-overlay-icon { font-size: 28px; color: white; opacity: 0.85; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(20,16,10,0.96);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: all 0.3s;
+    }
+    .lightbox.open { opacity: 1; visibility: visible; }
+    .lightbox img {
+      max-width: 90vw; max-height: 85vh;
+      object-fit: contain; display: block;
+    }
+    .lightbox-placeholder {
+      width: 70vw; max-width: 900px; aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #3a3020 0%, #2a2010 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px; color: rgba(255,255,255,0.4);
+      font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase;
+    }
+    .lightbox-close {
+      position: absolute; top: 24px; right: 30px;
+      background: none; border: 1px solid rgba(255,255,255,0.3); color: white;
+      font-size: 18px; width: 40px; height: 40px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,0.1); }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: none; border: 1px solid rgba(255,255,255,0.3); color: white;
+      width: 48px; height: 48px; font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.1); }
+    .lightbox-prev { left: 24px; }
+    .lightbox-next { right: 24px; }
+    .lightbox-counter {
+      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+      color: rgba(255,255,255,0.45); font-size: 11px; letter-spacing: 0.2em;
+    }
+
+    /* ── UPLOAD HINT ── */
+    .upload-hint {
+      background: var(--warm-white); border: 1px dashed var(--sand);
+      padding: 28px 32px; margin-bottom: 50px;
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .upload-hint-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .upload-hint-text { font-size: 13.5px; line-height: 1.75; color: var(--light-text); }
+    .upload-hint-text strong { color: var(--mid); font-weight: 400; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--dark); color: rgba(255,255,255,0.45); text-align: center; padding: 40px; font-size: 12px; letter-spacing: 0.1em; }
+    footer strong { color: rgba(255,255,255,0.7); font-weight: 400; }
+    footer a { color: rgba(255,255,255,0.45); text-decoration: none; }
+
+    /* ── LANG ── */
+    [data-lang="en"] { display: none; }
+    body.lang-en [data-lang="da"] { display: none; }
+    body.lang-en [data-lang="en"] { display: revert; }
+    body.lang-en .lang-btn[data-target="en"] { background: var(--gold); color: white; }
+    body.lang-en .lang-btn[data-target="da"] { background: none; color: var(--mid); }
+
+    @media (max-width: 768px) {
+      .navbar { padding: 0 24px; }
+      .navbar-center { display: none; }
+      .nav-toggle { display: flex; }
+      .navbar-center.open {
+        display: flex; flex-direction: column; position: fixed;
+        top: 60px; left: 0; right: 0; background: var(--cream);
+        border-bottom: 1px solid var(--sand); padding: 10px 0 20px; align-items: stretch;
+      }
+      .nav-link { height: auto; line-height: 1; padding: 14px 24px; }
+      .dropdown { position: static; border: none; border-left: 3px solid var(--gold); box-shadow: none; margin-left: 20px; opacity: 1; visibility: visible; transform: none; display: none; }
+      .nav-item.open .dropdown { display: block; }
+      .gallery-section { padding: 40px 20px 70px; }
+      .grid-3, .grid-2, .grid-feature, .grid-feature-rev { grid-template-columns: 1fr 1fr; }
+      .page-header { padding: 90px 24px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-logo">Villa <em>Alba</em></a>
+    <div class="navbar-center" id="navCenter">
+      <div class="nav-item"><a href="index.html#about" class="nav-link" data-lang="da">Villaen</a><a href="index.html#about" class="nav-link" data-lang="en">The Villa</a></div>
+      <div class="nav-item"><a href="gallery.html" class="nav-link active" data-lang="da">Galleri</a><a href="gallery.html" class="nav-link active" data-lang="en">Gallery</a></div>
+      <div class="nav-item"><a href="index.html#features" class="nav-link" data-lang="da">Faciliteter</a><a href="index.html#features" class="nav-link" data-lang="en">Amenities</a></div>
+      <div class="nav-item"><a href="index.html#area" class="nav-link" data-lang="da">Området</a><a href="index.html#area" class="nav-link" data-lang="en">The Area</a></div>
+      <div class="nav-item">
+        <span class="nav-link has-dropdown">Transport</span>
+        <div class="dropdown">
+          <span class="dropdown-label" data-lang="da">Kom til Antibes</span>
+          <span class="dropdown-label" data-lang="en">Getting to Antibes</span>
+          <a href="transport.html#taxi" data-lang="da">🚕 &nbsp;Taxa</a>
+          <a href="transport.html#taxi" data-lang="en">🚕 &nbsp;Taxi</a>
+          <a href="transport.html#train" data-lang="da">🚆 &nbsp;Tog</a>
+          <a href="transport.html#train" data-lang="en">🚆 &nbsp;Train</a>
+          <a href="transport.html#bus" data-lang="da">🚌 &nbsp;Bus</a>
+          <a href="transport.html#bus" data-lang="en">🚌 &nbsp;Bus</a>
+        </div>
+      </div>
+      <div class="nav-item"><a href="index.html#contact" class="nav-link" data-lang="da">Kontakt</a><a href="index.html#contact" class="nav-link" data-lang="en">Contact</a></div>
+    </div>
+    <div class="navbar-right">
+      <button class="lang-btn active" data-target="da" onclick="setLang('da')">DA</button>
+      <button class="lang-btn" data-target="en" onclick="setLang('en')">EN</button>
+      <button class="nav-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <p class="page-eyebrow">Villa Alba · Antibes</p>
+    <h1 class="page-title" data-lang="da">Foto<em>galleri</em></h1>
+    <h1 class="page-title" data-lang="en">Photo<em>gallery</em></h1>
+    <p class="page-subtitle" data-lang="da">Et kig ind i villaen — rum, have og de omgivelser der gør et ophold her uforglemmelig.</p>
+    <p class="page-subtitle" data-lang="en">A glimpse inside the villa — rooms, garden and the surroundings that make a stay here unforgettable.</p>
+  </div>
+
+  <!-- GALLERY CONTENT -->
+  <div class="gallery-section">
+
+    <!-- Upload hint -->
+    <div class="upload-hint">
+      <span class="upload-hint-icon">💡</span>
+      <p class="upload-hint-text" data-lang="da">
+        <strong>Sådan tilføjer du dine egne billeder:</strong> Upload dine billeder til GitHub i samme mappe som index.html. Erstat derefter <code>src="dit-billede.jpg"</code> i koden med det præcise filnavn. Du kan fjerne dette felt når du er tilfreds med billederne.
+      </p>
+      <p class="upload-hint-text" data-lang="en">
+        <strong>How to add your own photos:</strong> Upload your images to GitHub in the same folder as index.html. Then replace <code>src="your-image.jpg"</code> in the code with the exact filename. You can remove this box once you're happy with the photos.
+      </p>
+    </div>
+
+    <!-- UDVENDIGT / EXTERIOR -->
+    <div class="gallery-category">
+      <p class="category-label" data-lang="da">Udvendigt</p>
+      <p class="category-label" data-lang="en">Exterior</p>
+      <h2 class="category-title" data-lang="da">Facade, have &amp; <em>pool</em></h2>
+      <h2 class="category-title" data-lang="en">Facade, garden &amp; <em>pool</em></h2>
+      <div class="photo-grid grid-feature" style="margin-bottom:6px;">
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(0)">
+          <!-- Erstat med: <img src="facade.jpg" alt="Facade"> -->
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🏡</span><span data-lang="da">Facade — indsæt foto</span><span data-lang="en">Facade — insert photo</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(1)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🏊</span><span data-lang="da">Pool — indsæt foto</span><span data-lang="en">Pool — insert photo</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+      </div>
+      <div class="photo-grid grid-3">
+        <div class="photo-slot ratio-square" onclick="openLightbox(2)">
+          <div class="photo-placeholder ratio-square"><span class="photo-placeholder-icon">🌿</span><span data-lang="da">Have</span><span data-lang="en">Garden</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-square" onclick="openLightbox(3)">
+          <div class="photo-placeholder ratio-square"><span class="photo-placeholder-icon">☀️</span><span data-lang="da">Terrasse</span><span data-lang="en">Terrace</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-square" onclick="openLightbox(4)">
+          <div class="photo-placeholder ratio-square"><span class="photo-placeholder-icon">🍋</span><span data-lang="da">Oliventræer</span><span data-lang="en">Olive trees</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUE & KØK / LIVING & KITCHEN -->
+    <div class="gallery-category">
+      <p class="category-label" data-lang="da">Indvendigt</p>
+      <p class="category-label" data-lang="en">Interior</p>
+      <h2 class="category-title" data-lang="da">Stue &amp; <em>køkken</em></h2>
+      <h2 class="category-title" data-lang="en">Living room &amp; <em>kitchen</em></h2>
+      <div class="photo-grid grid-3" style="margin-bottom:6px;">
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(5)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🛋️</span><span data-lang="da">Stue</span><span data-lang="en">Living room</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(6)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🍽️</span><span data-lang="da">Køkken</span><span data-lang="en">Kitchen</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(7)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🥂</span><span data-lang="da">Spisestue</span><span data-lang="en">Dining area</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+      </div>
+      <div class="photo-grid grid-feature-rev">
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(8)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🪟</span><span data-lang="da">Udsigt fra stuen</span><span data-lang="en">View from living room</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(9)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">☕</span><span data-lang="da">Morgenmadshjørne</span><span data-lang="en">Breakfast nook</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOVEVÆRELSER / BEDROOMS -->
+    <div class="gallery-category">
+      <p class="category-label" data-lang="da">Soveværelser</p>
+      <p class="category-label" data-lang="en">Bedrooms</p>
+      <h2 class="category-title" data-lang="da">4 lyse <em>soveværelser</em></h2>
+      <h2 class="category-title" data-lang="en">4 bright <em>bedrooms</em></h2>
+      <div class="photo-grid grid-2" style="margin-bottom:6px;">
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(10)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🛏️</span><span data-lang="da">Soveværelse 1</span><span data-lang="en">Bedroom 1</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(11)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🛏️</span><span data-lang="da">Soveværelse 2</span><span data-lang="en">Bedroom 2</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+      </div>
+      <div class="photo-grid grid-2">
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(12)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🛏️</span><span data-lang="da">Soveværelse 3</span><span data-lang="en">Bedroom 3</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-landscape" onclick="openLightbox(13)">
+          <div class="photo-placeholder ratio-landscape"><span class="photo-placeholder-icon">🛏️</span><span data-lang="da">Soveværelse 4</span><span data-lang="en">Bedroom 4</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BADEVÆRELSER / BATHROOMS -->
+    <div class="gallery-category">
+      <p class="category-label" data-lang="da">Badeværelser</p>
+      <p class="category-label" data-lang="en">Bathrooms</p>
+      <h2 class="category-title" data-lang="da">3 elegante <em>badeværelser</em></h2>
+      <h2 class="category-title" data-lang="en">3 elegant <em>bathrooms</em></h2>
+      <div class="photo-grid grid-3">
+        <div class="photo-slot ratio-portrait" onclick="openLightbox(14)">
+          <div class="photo-placeholder ratio-portrait"><span class="photo-placeholder-icon">🚿</span><span data-lang="da">Badeværelse 1</span><span data-lang="en">Bathroom 1</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-portrait" onclick="openLightbox(15)">
+          <div class="photo-placeholder ratio-portrait"><span class="photo-placeholder-icon">🛁</span><span data-lang="da">Badeværelse 2</span><span data-lang="en">Bathroom 2</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+        <div class="photo-slot ratio-portrait" onclick="openLightbox(16)">
+          <div class="photo-placeholder ratio-portrait"><span class="photo-placeholder-icon">🪞</span><span data-lang="da">Badeværelse 3</span><span data-lang="en">Bathroom 3</span></div>
+          <div class="photo-overlay"><span class="photo-overlay-icon">⊕</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /gallery-section -->
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">‹</button>
+    <div class="lightbox-placeholder" id="lightboxContent">
+      <span style="font-size:36px">🖼️</span>
+      <span data-lang="da">Billede ikke indsat endnu</span>
+      <span data-lang="en">Photo not yet added</span>
+    </div>
+    <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">›</button>
+    <p class="lightbox-counter" id="lightboxCounter"></p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>Villa Alba</strong> &nbsp;·&nbsp; Antibes, Côte d'Azur &nbsp;·&nbsp; <a href="index.html">← Tilbage til forsiden</a></p>
+  </footer>
+
+  <script>
+    const TOTAL = 17;
+    let current = 0;
+
+    function openLightbox(i) {
+      current = i;
+      document.getElementById('lightbox').classList.add('open');
+      document.getElementById('lightboxCounter').textContent = (i + 1) + ' / ' + TOTAL;
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function closeLightboxOutside(e) {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    }
+    function navLightbox(dir) {
+      current = (current + dir + TOTAL) % TOTAL;
+      document.getElementById('lightboxCounter').textContent = (current + 1) + ' / ' + TOTAL;
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') navLightbox(1);
+      if (e.key === 'ArrowLeft') navLightbox(-1);
+    });
+
+    function setLang(lang) {
+      document.body.classList.toggle('lang-en', lang === 'en');
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.target === lang);
+      });
+    }
+    function toggleMenu() {
+      document.getElementById('navCenter').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

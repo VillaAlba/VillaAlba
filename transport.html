@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transport — Villa Alba, Antibes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #faf8f4;
+      --warm-white: #f5f0e8;
+      --sand: #e8ddc8;
+      --gold: #b8965a;
+      --dark: #2c2416;
+      --mid: #5a4e3a;
+      --light-text: #8a7a62;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--dark); font-weight: 300; }
+
+    /* ── NAVBAR (same as other pages) ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 40px; height: 60px;
+      background: rgba(250,248,244,0.95); backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(184,150,90,0.15);
+    }
+    .navbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.08em; color: var(--dark); text-decoration: none; }
+    .navbar-logo em { font-style: italic; }
+    .navbar-center { display: flex; align-items: center; }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: block; padding: 0 18px; height: 60px; line-height: 60px;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none; cursor: pointer;
+      transition: color 0.2s; white-space: nowrap;
+      background: none; border: none; font-family: 'Jost', sans-serif; font-weight: 300;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--gold); }
+    .nav-link.has-dropdown::after { content: ' ▾'; font-size: 9px; opacity: 0.6; }
+    .dropdown {
+      position: absolute; top: 60px; left: 0; min-width: 200px;
+      background: var(--cream); border: 1px solid rgba(184,150,90,0.2);
+      border-top: 2px solid var(--gold); box-shadow: 0 8px 30px rgba(44,36,22,0.1);
+      opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.25s ease;
+    }
+    .nav-item:hover .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown a {
+      display: block; padding: 14px 20px; font-size: 12px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--mid); text-decoration: none;
+      border-bottom: 1px solid rgba(184,150,90,0.1); transition: all 0.2s;
+    }
+    .dropdown a:last-child { border-bottom: none; }
+    .dropdown a:hover { background: var(--warm-white); color: var(--gold); padding-left: 26px; }
+    .dropdown-label { display: block; padding: 10px 20px 6px; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); opacity: 0.7; }
+    .navbar-right { display: flex; align-items: center; gap: 6px; }
+    .lang-btn { background: none; border: 1px solid var(--gold); color: var(--mid); font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; padding: 5px 12px; cursor: pointer; transition: all 0.25s; }
+    .lang-btn.active, .lang-btn:hover { background: var(--gold); color: white; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; flex-direction: column; gap: 5px; }
+    .nav-toggle span { display: block; width: 22px; height: 1px; background: var(--dark); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 120px 40px 60px; text-align: center;
+      background: var(--warm-white); border-bottom: 1px solid var(--sand);
+    }
+    .page-eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 6vw, 62px); font-weight: 300; line-height: 1.1; color: var(--dark); }
+    .page-title em { font-style: italic; }
+    .page-subtitle { margin-top: 16px; font-size: 14px; color: var(--light-text); letter-spacing: 0.05em; line-height: 1.7; }
+
+    /* ── TRANSPORT SECTIONS ── */
+    .transport-section {
+      padding: 90px 40px;
+      border-bottom: 1px solid var(--sand);
+    }
+    .transport-section:nth-child(even) { background: var(--warm-white); }
+    .transport-section:nth-child(odd)  { background: var(--cream); }
+
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .section-label::after { content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--gold); opacity: 0.4; }
+
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 48px); font-weight: 300; line-height: 1.1; margin-bottom: 10px; color: var(--dark); }
+    .section-title em { font-style: italic; }
+    .section-icon { font-size: 36px; margin-bottom: 16px; }
+
+    .transport-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+      margin-top: 40px;
+    }
+
+    .body-text { font-size: 15px; line-height: 1.85; color: var(--mid); }
+
+    .info-cards { display: flex; flex-direction: column; gap: 2px; margin-top: 24px; }
+    .info-card {
+      background: white;
+      padding: 20px 24px;
+      border-left: 3px solid var(--gold);
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .info-card-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .info-card-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+    .info-card-value { font-size: 14px; line-height: 1.6; color: var(--mid); }
+    .info-card-value strong { color: var(--dark); font-weight: 400; }
+
+    /* ── MAP ── */
+    .map-container {
+      position: relative;
+      border: 1px solid var(--sand);
+      overflow: hidden;
+    }
+    .map-container iframe {
+      display: block;
+      width: 100%;
+      height: 380px;
+      border: 0;
+    }
+    .map-label {
+      background: var(--dark);
+      color: rgba(255,255,255,0.7);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .map-label span { color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--dark); color: rgba(255,255,255,0.45); text-align: center; padding: 40px; font-size: 12px; letter-spacing: 0.1em; }
+    footer strong { color: rgba(255,255,255,0.7); font-weight: 400; }
+    footer a { color: rgba(255,255,255,0.45); text-decoration: none; }
+
+    /* ── LANG ── */
+    [data-lang="en"] { display: none; }
+    body.lang-en [data-lang="da"] { display: none; }
+    body.lang-en [data-lang="en"] { display: revert; }
+    body.lang-en .lang-btn[data-target="en"] { background: var(--gold); color: white; }
+    body.lang-en .lang-btn[data-target="da"] { background: none; color: var(--mid); }
+
+    @media (max-width: 768px) {
+      .navbar { padding: 0 24px; }
+      .navbar-center { display: none; }
+      .nav-toggle { display: flex; }
+      .navbar-center.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--cream); border-bottom: 1px solid var(--sand); padding: 10px 0 20px; align-items: stretch; }
+      .nav-link { height: auto; line-height: 1; padding: 14px 24px; }
+      .dropdown { position: static; border: none; border-left: 3px solid var(--gold); box-shadow: none; margin-left: 20px; opacity: 1; visibility: visible; transform: none; display: none; }
+      .nav-item.open .dropdown { display: block; }
+      .transport-grid { grid-template-columns: 1fr; gap: 36px; }
+      .transport-section { padding: 60px 24px; }
+      .page-header { padding: 90px 24px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-logo">Villa <em>Alba</em></a>
+    <div class="navbar-center" id="navCenter">
+      <div class="nav-item"><a href="index.html#about" class="nav-link" data-lang="da">Villaen</a><a href="index.html#about" class="nav-link" data-lang="en">The Villa</a></div>
+      <div class="nav-item"><a href="gallery.html" class="nav-link" data-lang="da">Galleri</a><a href="gallery.html" class="nav-link" data-lang="en">Gallery</a></div>
+      <div class="nav-item"><a href="index.html#features" class="nav-link" data-lang="da">Faciliteter</a><a href="index.html#features" class="nav-link" data-lang="en">Amenities</a></div>
+      <div class="nav-item"><a href="index.html#area" class="nav-link" data-lang="da">Området</a><a href="index.html#area" class="nav-link" data-lang="en">The Area</a></div>
+      <div class="nav-item">
+        <span class="nav-link has-dropdown active">Transport</span>
+        <div class="dropdown">
+          <span class="dropdown-label" data-lang="da">Kom til Antibes</span>
+          <span class="dropdown-label" data-lang="en">Getting to Antibes</span>
+          <a href="#taxi" data-lang="da">🚕 &nbsp;Taxa</a>
+          <a href="#taxi" data-lang="en">🚕 &nbsp;Taxi</a>
+          <a href="#train" data-lang="da">🚆 &nbsp;Tog</a>
+          <a href="#train" data-lang="en">🚆 &nbsp;Train</a>
+          <a href="#bus" data-lang="da">🚌 &nbsp;Bus</a>
+          <a href="#bus" data-lang="en">🚌 &nbsp;Bus</a>
+        </div>
+      </div>
+      <div class="nav-item"><a href="index.html#contact" class="nav-link" data-lang="da">Kontakt</a><a href="index.html#contact" class="nav-link" data-lang="en">Contact</a></div>
+    </div>
+    <div class="navbar-right">
+      <button class="lang-btn active" data-target="da" onclick="setLang('da')">DA</button>
+      <button class="lang-btn" data-target="en" onclick="setLang('en')">EN</button>
+      <button class="nav-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <p class="page-eyebrow">Villa Alba · Antibes</p>
+    <h1 class="page-title" data-lang="da">Transport til <em>Antibes</em></h1>
+    <h1 class="page-title" data-lang="en">Getting to <em>Antibes</em></h1>
+    <p class="page-subtitle" data-lang="da">Fra Nice lufthavn til Villa Alba — alle dine muligheder samlet på ét sted.</p>
+    <p class="page-subtitle" data-lang="en">From Nice airport to Villa Alba — all your options gathered in one place.</p>
+  </div>
+
+  <!-- ══ TAXI ══ -->
+  <section class="transport-section" id="taxi">
+    <div class="section-inner">
+      <div class="section-icon">🚕</div>
+      <p class="section-label" data-lang="da">Hurtigst og nemmest</p>
+      <p class="section-label" data-lang="en">Fastest and easiest</p>
+      <h2 class="section-title" data-lang="da">Taxa fra <em>Nice Lufthavn</em></h2>
+      <h2 class="section-title" data-lang="en">Taxi from <em>Nice Airport</em></h2>
+      <div class="transport-grid">
+        <div>
+          <p class="body-text" data-lang="da">
+            Taxa er den nemmeste måde at komme fra Nice Côte d'Azur Lufthavn til Villa Alba. Taxaerne holder på ankomstterminalen i Terminal 1 og Terminal 2 — følg skiltene med "Taxis" ved bagagebåndet.
+          </p>
+          <p class="body-text" data-lang="en">
+            Taxi is the easiest way to get from Nice Côte d'Azur Airport to Villa Alba. Taxis are available at both Terminal 1 and Terminal 2 — follow the "Taxis" signs near the baggage claim.
+          </p>
+          <div class="info-cards">
+            <div class="info-card">
+              <span class="info-card-icon">⏱️</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Rejsetid</p>
+                <p class="info-card-label" data-lang="en">Journey time</p>
+                <p class="info-card-value" data-lang="da"><strong>ca. 25–35 minutter</strong> (afhænger af trafik)</p>
+                <p class="info-card-value" data-lang="en"><strong>approx. 25–35 minutes</strong> (depending on traffic)</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-card-icon">💶</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Pris</p>
+                <p class="info-card-label" data-lang="en">Price</p>
+                <p class="info-card-value" data-lang="da"><strong>ca. €55–80</strong> afhængigt af tidspunkt og bagage</p>
+                <p class="info-card-value" data-lang="en"><strong>approx. €55–80</strong> depending on time of day and luggage</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-card-icon">📱</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Alternativ</p>
+                <p class="info-card-label" data-lang="en">Alternative</p>
+                <p class="info-card-value" data-lang="da">Uber og Bolt er tilgængelige i Nice og er ofte lidt billigere end taxa</p>
+                <p class="info-card-value" data-lang="en">Uber and Bolt are available in Nice and are often slightly cheaper than taxis</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-card-icon">📍</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Taxastand</p>
+                <p class="info-card-label" data-lang="en">Taxi rank</p>
+                <p class="info-card-value" data-lang="da">Terminal 1: Ankomst niveau 0 · Terminal 2: Foran T2</p>
+                <p class="info-card-value" data-lang="en">Terminal 1: Arrivals level 0 · Terminal 2: In front of T2</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="map-container">
+            <div class="map-label"><span>📍</span> Nice Côte d'Azur Airport (NCE)</div>
+            <!-- Google Maps embed — Nice Airport -->
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2885.123456789!2d7.2589!3d43.6584!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cdd23e7c5f9ec5%3A0x40819a5fd979ac0!2sNice%20C%C3%B4te%20d'Azur%20Airport!5e0!3m2!1sda!2sdk!4v1700000000000!5m2!1sda!2sdk"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TOG / TRAIN ══ -->
+  <section class="transport-section" id="train">
+    <div class="section-inner">
+      <div class="section-icon">🚆</div>
+      <p class="section-label" data-lang="da">Hurtigt og scenisk</p>
+      <p class="section-label" data-lang="en">Fast and scenic</p>
+      <h2 class="section-title" data-lang="da">Tog fra <em>Nice Lufthavn</em></h2>
+      <h2 class="section-title" data-lang="en">Train from <em>Nice Airport</em></h2>
+      <div class="transport-grid">
+        <div>
+          <p class="body-text" data-lang="da">
+            Tog er en behagelig og billig måde at rejse langs kysten. Fra lufthavnen tager du først bussen eller taxa til Nice-Saint-Augustin station (5 min.), og derfra er der direkte tog til Antibes. Alternativt kan du tage tram til Nice Ville station og skifte der.
+          </p>
+          <p class="body-text" data-lang="en">
+            The train is a comfortable and affordable way to travel along the coast. From the airport, take the bus or taxi to Nice-Saint-Augustin station (5 min.), from where there are direct trains to Antibes. Alternatively, take the tram to Nice Ville station and change there.
+          </p>
+          <div class="info-cards">
+            <div class="info-card">
+              <span class="info-card-icon">⏱️</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Rejsetid (Nice → Antibes)</p>
+                <p class="info-card-label" data-lang="en">Journey time (Nice → Antibes)</p>
+                <p class="info-card-value" data-lang="da"><strong>ca. 25 minutter</strong> · Afgår hvert 30. min.</p>
+                <p class="info-card-value" data-lang="en"><strong>approx. 25 minutes</strong> · Departs every 30 min.</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-card-icon">💶</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Pris</p>
+                <p class="info-card-label" data-lang="en">Price</p>
+                <p class="info-card-value" data-lang="da"><strong>ca. €5–8</strong> per person · Køb billet i automaten eller på SNCF-appen</p>
+                <p class="info-card-value" data-lang="en"><strong>approx. €5–8</strong> per person · Buy tickets at the machine or via the SNCF app</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-card-icon">🚉</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Ankomst</p>
+                <p class="info-card-label" data-lang="en">Arrival</p>
+                <p class="info-card-value" data-lang="da">Gare d'Antibes er <strong>10 min. gang</strong> fra Villa Alba</p>
+                <p class="info-card-value" data-lang="en">Gare d'Antibes is <strong>10 min. on foot</strong> from Villa Alba</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-card-icon">💡</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Tip</p>
+                <p class="info-card-label" data-lang="en">Tip</p>
+                <p class="info-card-value" data-lang="da">Tog er ideelt ved lettere bagage. Med meget bagage er taxa nemmere.</p>
+                <p class="info-card-value" data-lang="en">Trains are ideal with light luggage. With heavy bags, a taxi is more convenient.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="map-container">
+            <div class="map-label"><span>🚉</span> Nice-Saint-Augustin Station</div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.0!2d7.2330!3d43.6650!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cdd1f3d3e00001%3A0x1234567890abcdef!2sNice-Saint-Augustin%20Station!5e0!3m2!1sda!2sdk!4v1700000001000!5m2!1sda!2sdk"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BUS ══ -->
+  <section class="transport-section" id="bus">
+    <div class="section-inner">
+      <div class="section-icon">🚌</div>
+      <p class="section-label" data-lang="da">Billigste mulighed</p>
+      <p class="section-label" data-lang="en">Most affordable option</p>
+      <h2 class="section-title" data-lang="da">Bus fra <em>Nice Lufthavn</em></h2>
+      <h2 class="section-title" data-lang="en">Bus from <em>Nice Airport</em></h2>
+      <div class="transport-grid">
+        <div>
+          <p class="body-text" data-lang="da">
+            Linje 200 (Lignes d'Azur) kører direkte fra Nice Lufthavn til Antibes langs kystvejen. Bussen stopper ved Terminal 1 og Terminal 2. Det er den billigste mulighed, men tager lidt længere tid end tog — og er ikke ideel med meget bagage.
+          </p>
+          <p class="body-text" data-lang="en">
+            Line 200 (Lignes d'Azur) runs directly from Nice Airport to Antibes along the coastal road. The bus stops at both Terminal 1 and Terminal 2. It is the cheapest option, but takes a little longer than the train — and is not ideal with heavy luggage.
+          </p>
+          <div class="info-cards">
+            <div class="info-card">
+              <span class="info-card-icon">⏱️</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Rejsetid</p>
+                <p class="info-card-label" data-lang="en">Journey time</p>
+                <p class="info-card-value" data-lang="da"><strong>ca. 50–70 minutter</strong> afhængigt af trafik</p>
+                <p class="info-card-value" data-lang="en"><strong>approx. 50–70 minutes</strong> depending on traffic</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-card-icon">💶</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Pris</p>
+                <p class="info-card-label" data-lang="en">Price</p>
+                <p class="info-card-value" data-lang="da"><strong>€1,50</strong> per person · Kontant eller kort til chaufføren</p>
+                <p class="info-card-value" data-lang="en"><strong>€1.50</strong> per person · Cash or card to the driver</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-card-icon">🕐</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Frekvens</p>
+                <p class="info-card-label" data-lang="en">Frequency</p>
+                <p class="info-card-value" data-lang="da">Ca. hvert <strong>15–20 minut</strong> i dagtimerne</p>
+                <p class="info-card-value" data-lang="en">Approximately every <strong>15–20 minutes</strong> during the day</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <span class="info-card-icon">📍</span>
+              <div>
+                <p class="info-card-label" data-lang="da">Stoppested i Antibes</p>
+                <p class="info-card-label" data-lang="en">Stop in Antibes</p>
+                <p class="info-card-value" data-lang="da">Arrêt Antibes Gare Routière (busstation) · derefter 5 min. gang</p>
+                <p class="info-card-value" data-lang="en">Arrêt Antibes Gare Routière (bus station) · then 5 min. on foot</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="map-container">
+            <div class="map-label"><span>🚌</span> Bus 200 — Stop ved Nice Lufthavn T2</div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2885.5!2d7.2620!3d43.6650!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cdd23e7c5f9ec5%3A0x40819a5fd979ac0!2sNice%20C%C3%B4te%20d'Azur%20Airport%2C%20Terminal%202!5e0!3m2!1sda!2sdk!4v1700000002000!5m2!1sda!2sdk"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>Villa Alba</strong> &nbsp;·&nbsp; Antibes, Côte d'Azur &nbsp;·&nbsp; <a href="index.html">← Tilbage til forsiden</a></p>
+  </footer>
+
+  <script>
+    function setLang(lang) {
+      document.body.classList.toggle('lang-en', lang === 'en');
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.target === lang);
+      });
+    }
+    function toggleMenu() {
+      document.getElementById('navCenter').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
